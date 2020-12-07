@@ -62,23 +62,16 @@ class Database_Connect:
                 WHERE TABLE_NAME = N'tb_items'"""
         cursor.execute(sql)
         headers = cursor.fetchall()
-        headers_fix = []
+        self.headers_fix = []
         for i in headers:
-            headers_fix.append(i[3])
+            self.headers_fix.append(i[3])
 
         cursor = self.db.cursor()
         sql = "SELECT * FROM tb_items"
         cursor.execute(sql)
-        results = cursor.fetchall()
+        self.results = cursor.fetchall()
 
-        print("{: <10} {: <30} {: <15} {: <15} {: <15} {: <15} {: <15} {: <15}".format(*headers_fix))
-        if cursor.rowcount < 0:
-            print("No data")
-        else:
-            for data in results:
-                print("{: <10} {: <30} {: <15} {: <15} {: <15} {: <15} {: <15} {: <15}".format(*data))
-
-        return headers_fix, results
+        return self.headers_fix, self.results
 
     def get_record_warehouse(self):
 
@@ -104,4 +97,11 @@ class Database_Connect:
             for data in results:
                 print("{: <15} {: <100}".format(*data))
 
+    def get_item_values(self):
+        if len(self.results) == 0:
+            print("No data")
+        else:
+            print("{: <10} {: <30} {: <15} {: <15} {: <15} {: <15} {: <15} {: <15}".format(*self.headers_fix))
+            for data in self.results:
+                print("{: <10} {: <30} {: <15} {: <15} {: <15} {: <15} {: <15} {: <15}".format(*data))
 

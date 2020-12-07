@@ -99,15 +99,50 @@ Masukkan pilihan anda : """ ,end='')
             choose_get = int(input())
             if choose_get == 1:
                 main_model.fetch_item()
+                main_model.print_item_values()
                 self.show_get_menu()
             elif choose_get == 2:
                 main_model.fetch_warehouse()
                 self.show_get_menu()
             elif choose_get == 3:
                 main_model.fetch_item()
-                print(main_model.item_data)
+                self.search_data()
+                self.show_get_menu()
+            elif choose_get == 4:
+                main_model.fetch_item()
+                main_model.print_sorted_item()
+            elif choose_get == 5:
+                self.show_main_menu()
             else:
                 print("Pilihan tidak tersedia. Mohon input lagi")
+    
+    def search_data(self):
+        choose_get = 0
+        while (choose_get < 1 or choose_get > 2):
+            print("""
+Menu mana yang akan anda gunakan? (Pilih no 1-2)
+1. Masukkan nama barang ATAU kategori barang
+2. Kembali ke menu utama
+
+Masukkan pilihan anda : """ ,end='')
+            choose_get = int(input())
+            if choose_get == 1:
+                try:
+                    val = str(input())
+                    float(val)/0
+                except ZeroDivisionError:
+                    print("Barang tidak boleh berwujud angka saja. Masukkan lagi detail barang")
+                    self.search_data()
+                except ValueError:
+                    main_model.print_search_item(val)
+                self.search_data()
+            elif choose_get == 2:
+                self.show_get_menu()
+            else:
+                print("Pilihan tidak tersedia. Mohon input lagi")
+
+            
+
 
         
 
