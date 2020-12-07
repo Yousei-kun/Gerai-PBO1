@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 07, 2020 at 03:03 PM
+-- Generation Time: Dec 07, 2020 at 03:10 PM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.4.10
 
@@ -47,6 +47,26 @@ INSERT INTO `tb_items` (`ItemID`, `ProductName`, `CategoryName`, `UnitSellPrice`
 (2, 'Tango 100gr', 'Makanan', 2000, 1250, 100, 0, 1),
 (3, 'Sabun Shinzui', 'Kebersihan', 3500, 2500, 50, 0, 2);
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tb_warehouse`
+--
+
+CREATE TABLE `tb_warehouse` (
+  `WarehouseID` bigint(20) NOT NULL,
+  `WarehouseAddress` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tb_warehouse`
+--
+
+INSERT INTO `tb_warehouse` (`WarehouseID`, `WarehouseAddress`) VALUES
+(1, 'Jalan Letjend S. Parman no 31 Jember, Jawa Timur'),
+(2, 'Jalan Kartini no 23 Jember, Jawa Timur'),
+(3, 'Jalan Setelan no 32 Malang, Jawa Timur');
+
 --
 -- Indexes for dumped tables
 --
@@ -59,6 +79,12 @@ ALTER TABLE `tb_items`
   ADD KEY `WarehouseID` (`WarehouseID`);
 
 --
+-- Indexes for table `tb_warehouse`
+--
+ALTER TABLE `tb_warehouse`
+  ADD PRIMARY KEY (`WarehouseID`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -67,6 +93,12 @@ ALTER TABLE `tb_items`
 --
 ALTER TABLE `tb_items`
   MODIFY `ItemID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `tb_warehouse`
+--
+ALTER TABLE `tb_warehouse`
+  MODIFY `WarehouseID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Constraints for dumped tables
