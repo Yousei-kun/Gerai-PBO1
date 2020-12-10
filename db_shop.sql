@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.2
+-- version 5.0.4
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 07, 2020 at 03:10 PM
--- Server version: 10.4.14-MariaDB
--- PHP Version: 7.4.10
+-- Generation Time: Dec 10, 2020 at 02:47 AM
+-- Server version: 10.4.17-MariaDB
+-- PHP Version: 7.3.25
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -50,6 +50,55 @@ INSERT INTO `tb_items` (`ItemID`, `ProductName`, `CategoryName`, `UnitSellPrice`
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `tb_level`
+--
+
+CREATE TABLE `tb_level` (
+  `LevelID` bigint(20) NOT NULL,
+  `LevelName` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tb_persons`
+--
+
+CREATE TABLE `tb_persons` (
+  `PersonID` bigint(20) NOT NULL,
+  `PersonName` varchar(255) DEFAULT NULL,
+  `PersonAge` bigint(20) DEFAULT NULL,
+  `PersonAdress` varchar(255) DEFAULT NULL,
+  `LevelID` bigint(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tb_transactions`
+--
+
+CREATE TABLE `tb_transactions` (
+  `TransactionID` bigint(20) NOT NULL,
+  `TransactionDate` date DEFAULT NULL,
+  `PersonID` bigint(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tb_transaction_details`
+--
+
+CREATE TABLE `tb_transaction_details` (
+  `DetailTransactionID` bigint(20) NOT NULL,
+  `TransactionID` bigint(20) NOT NULL,
+  `PersonID` bigint(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `tb_warehouse`
 --
 
@@ -79,6 +128,34 @@ ALTER TABLE `tb_items`
   ADD KEY `WarehouseID` (`WarehouseID`);
 
 --
+-- Indexes for table `tb_level`
+--
+ALTER TABLE `tb_level`
+  ADD PRIMARY KEY (`LevelID`);
+
+--
+-- Indexes for table `tb_persons`
+--
+ALTER TABLE `tb_persons`
+  ADD PRIMARY KEY (`PersonID`),
+  ADD KEY `LevelID` (`LevelID`);
+
+--
+-- Indexes for table `tb_transactions`
+--
+ALTER TABLE `tb_transactions`
+  ADD PRIMARY KEY (`TransactionID`),
+  ADD KEY `PersonID` (`PersonID`);
+
+--
+-- Indexes for table `tb_transaction_details`
+--
+ALTER TABLE `tb_transaction_details`
+  ADD PRIMARY KEY (`DetailTransactionID`),
+  ADD KEY `TransactionID` (`TransactionID`),
+  ADD KEY `PersonID` (`PersonID`);
+
+--
 -- Indexes for table `tb_warehouse`
 --
 ALTER TABLE `tb_warehouse`
@@ -95,6 +172,24 @@ ALTER TABLE `tb_items`
   MODIFY `ItemID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT for table `tb_persons`
+--
+ALTER TABLE `tb_persons`
+  MODIFY `PersonID` bigint(20) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `tb_transactions`
+--
+ALTER TABLE `tb_transactions`
+  MODIFY `TransactionID` bigint(20) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `tb_transaction_details`
+--
+ALTER TABLE `tb_transaction_details`
+  MODIFY `DetailTransactionID` bigint(20) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `tb_warehouse`
 --
 ALTER TABLE `tb_warehouse`
@@ -109,6 +204,25 @@ ALTER TABLE `tb_warehouse`
 --
 ALTER TABLE `tb_items`
   ADD CONSTRAINT `tb_items_ibfk_1` FOREIGN KEY (`WarehouseID`) REFERENCES `tb_warehouse` (`WarehouseID`);
+
+--
+-- Constraints for table `tb_persons`
+--
+ALTER TABLE `tb_persons`
+  ADD CONSTRAINT `tb_persons_ibfk_1` FOREIGN KEY (`LevelID`) REFERENCES `tb_level` (`LevelID`);
+
+--
+-- Constraints for table `tb_transactions`
+--
+ALTER TABLE `tb_transactions`
+  ADD CONSTRAINT `tb_transactions_ibfk_1` FOREIGN KEY (`PersonID`) REFERENCES `tb_persons` (`PersonID`);
+
+--
+-- Constraints for table `tb_transaction_details`
+--
+ALTER TABLE `tb_transaction_details`
+  ADD CONSTRAINT `tb_transaction_details_ibfk_1` FOREIGN KEY (`TransactionID`) REFERENCES `tb_transactions` (`TransactionID`),
+  ADD CONSTRAINT `tb_transaction_details_ibfk_2` FOREIGN KEY (`PersonID`) REFERENCES `tb_persons` (`PersonID`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

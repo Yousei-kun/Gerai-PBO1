@@ -40,6 +40,40 @@ class Database_Connect:
                 );"""
         cursor.execute(sql)
 
+        sql = """CREATE TABLE IF NOT EXISTS tb_level (
+                LevelID BIGINT PRIMARY KEY,
+                LevelName VARCHAR(255) NOT NULL
+                );"""
+        cursor.execute(sql)
+
+        sql = """CREATE TABLE IF NOT EXISTS tb_persons(
+                PersonID BIGINT AUTO_INCREMENT PRIMARY KEY,
+                PersonName VARCHAR(255),
+                PersonAge BIGINT,
+                PersonAdress VARCHAR(255),
+                LevelID BIGINT NOT NULL,
+                FOREIGN KEY (LevelID) REFERENCES tb_level(LevelID)
+            );"""
+        cursor.execute(sql)
+
+        sql = """CREATE TABLE IF NOT EXISTS tb_transactions(
+                TransactionID BIGINT AUTO_INCREMENT PRIMARY KEY,
+                TransactionDate DATE,
+                PersonID BIGINT NOT NULL,
+                FOREIGN KEY (PersonID) REFERENCES tb_persons(PersonID)
+        );"""
+        cursor.execute(sql)
+
+        sql = """CREATE TABLE IF NOT EXISTS tb_transaction_details(
+                DetailTransactionID BIGINT AUTO_INCREMENT PRIMARY KEY,
+                TransactionID BIGINT NOT NULL,
+                PersonID BIGINT NOT NULL,
+                FOREIGN KEY (TransactionID) REFERENCES tb_transactions(TransactionID),
+                FOREIGN KEY (PersonID) REFERENCES tb_persons(PersonID)
+        );"""
+        cursor.execute(sql)
+
+
     def record_warehouse_value(self, a):
         cursor = self.db.cursor()
         sql = "INSERT INTO tb_warehouse (WarehouseAddress) VALUE (%s)"
