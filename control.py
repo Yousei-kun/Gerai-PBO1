@@ -52,6 +52,7 @@ Masukkan pilihan anda : """ ,end='')
     def item_input_process(self):
         self.list_add_item_answers = []
         for i in range(0, len(self.list_add_item_questions)):
+            print(self.list_add_item_questions[i], end='')
             if i == 5:
                 self.list_add_item_answers.append(0)
             if i in [0,1]:
@@ -60,6 +61,8 @@ Masukkan pilihan anda : """ ,end='')
             else:
                 str(self.list_add_item_questions[i])
                 self.try_int_input(i)
+        self.show_add_menu()
+        
 
     def warehouse_input_process(self):
         self.list_add_item_answers = []
@@ -141,11 +144,9 @@ Masukkan pilihan anda : """ ,end='')
             else:
                 print("Pilihan tidak tersedia. Mohon input lagi")
 
-            
-
-
+    def show_transaction_menu(self):
+        pass
         
-
 
 if __name__ == "__main__":
     main_model = Model()
