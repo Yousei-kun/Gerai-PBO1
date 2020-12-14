@@ -141,7 +141,28 @@ Masukkan pilihan anda : """ ,end='')
             else:
                 print("Pilihan tidak tersedia. Mohon input lagi")
 
-            
+    def show_login_menu(self):
+        while True:
+            print("""SELAMAT DATANG DI APLIKASI GERAI
+            1. Login (Admin)
+            2. Login (Pelanggan)""")
+            choose_get = int(input("Masukkan pilihan anda: "))
+            if choose_get == 1:
+                username = input("Masukkan username: ")
+                password = input("Masukkan password: ")
+                if main_model.login(username, password):
+                    self.show_main_menu() # mengarahkan ke menu admin
+                else:
+                    print("Maaf, username / password tidak sesuai dengan data kami.")            
+            elif choose_get == 2:
+                username = input("Masukkan username: ")
+                password = input("Masukkan password: ")
+                if main_model.login(username, password):
+                    self.show_main_menu() # mengarahkan ke menu kasir
+                else:
+                    print("Maaf, username / password tidak sesuai dengan data kami.")   
+            else:
+                print("Pilihan tidak tersedia")
 
 
         
@@ -150,4 +171,4 @@ Masukkan pilihan anda : """ ,end='')
 if __name__ == "__main__":
     main_model = Model()
     main_controller = Controller()
-    main_controller.show_main_menu()
+    main_controller.show_login_menu()

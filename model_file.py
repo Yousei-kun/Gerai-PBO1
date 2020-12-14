@@ -55,5 +55,11 @@ class Model:
             for data in sorted_item_data:
                 print("{: <10} {: <30} {: <15} {: <15} {: <15} {: <15} {: <15} {: <15}".format(*data))
 
-    
+
+    def login(self, username, password):
+        login_credentioal = self.db_connect.login(username)
+        if login_credentioal == password:
+            return True
+        else:
+            return False
     

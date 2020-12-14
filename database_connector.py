@@ -49,6 +49,8 @@ class Database_Connect:
         sql = """CREATE TABLE IF NOT EXISTS tb_persons(
                 PersonID BIGINT AUTO_INCREMENT PRIMARY KEY,
                 PersonName VARCHAR(255),
+                Username VARCHAR(255) NOT NULL,
+                Password VARCHAR(255) NOT NULL,
                 PersonAge BIGINT,
                 PersonAdress VARCHAR(255),
                 LevelID BIGINT NOT NULL,
@@ -139,3 +141,15 @@ class Database_Connect:
             for data in self.results:
                 print("{: <10} {: <30} {: <15} {: <15} {: <15} {: <15} {: <15} {: <15}".format(*data))
 
+    def login(self, name):
+        try:
+            cursor = self.db.cursor()
+            query = "SELECT Password FROM tb_persons WHERE Username = %s"
+            cursor.execute(query, (name,))
+            return  cursor.fetchone()[0]
+        except mysql.connector.Error:
+            return ""
+        except TypeError:
+            return ""
+
+        
