@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 10, 2020 at 02:47 AM
+-- Generation Time: Dec 14, 2020 at 03:37 AM
 -- Server version: 10.4.17-MariaDB
 -- PHP Version: 7.3.25
 
@@ -58,6 +58,15 @@ CREATE TABLE `tb_level` (
   `LevelName` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `tb_level`
+--
+
+INSERT INTO `tb_level` (`LevelID`, `LevelName`) VALUES
+(1, 'Admin'),
+(2, 'Kasir'),
+(3, 'Pelanggan');
+
 -- --------------------------------------------------------
 
 --
@@ -67,10 +76,19 @@ CREATE TABLE `tb_level` (
 CREATE TABLE `tb_persons` (
   `PersonID` bigint(20) NOT NULL,
   `PersonName` varchar(255) DEFAULT NULL,
+  `Username` varchar(255) NOT NULL,
+  `Password` varchar(255) NOT NULL,
   `PersonAge` bigint(20) DEFAULT NULL,
   `PersonAdress` varchar(255) DEFAULT NULL,
   `LevelID` bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tb_persons`
+--
+
+INSERT INTO `tb_persons` (`PersonID`, `PersonName`, `Username`, `Password`, `PersonAge`, `PersonAdress`, `LevelID`) VALUES
+(1, 'Ivan', 'admin', 'admin123', 12, 'Jember', 1);
 
 -- --------------------------------------------------------
 
@@ -175,7 +193,7 @@ ALTER TABLE `tb_items`
 -- AUTO_INCREMENT for table `tb_persons`
 --
 ALTER TABLE `tb_persons`
-  MODIFY `PersonID` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `PersonID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `tb_transactions`
