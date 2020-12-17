@@ -69,9 +69,10 @@ class Database_Connect:
         sql = """CREATE TABLE IF NOT EXISTS tb_transaction_details(
                 DetailTransactionID BIGINT AUTO_INCREMENT PRIMARY KEY,
                 TransactionID BIGINT NOT NULL,
-                PersonID BIGINT NOT NULL,
+                ItemID BIGINT NOT NULL,
+    			StockSold DOUBLE NOT NULL,
                 FOREIGN KEY (TransactionID) REFERENCES tb_transactions(TransactionID),
-                FOREIGN KEY (PersonID) REFERENCES tb_persons(PersonID)
+                FOREIGN KEY (ItemID) REFERENCES tb_items(ItemID)
         );"""
         cursor.execute(sql)
 
@@ -88,6 +89,22 @@ class Database_Connect:
         sql = "INSERT INTO tb_items (ProductName,CategoryName,UnitSellPrice,UnitBuyPrice,StockAvailable,StockSold,WarehouseID) VALUES (%s,%s,%s,%s,%s,%s,%s)"
         val = list_input
         cursor.execute(sql, val)
+        self.db.commit()
+
+    def record_update_stock(self, id_stock, amount_stock):
+        cursor = self.db.cursor()
+        sql = """SELECT StockAvailable FROM tb_items WHERE ItemID = %s"""
+        val = (id_stock,)
+        cursor.execute(sql,val)
+        result = cursor.fetchall()
+        amount_stock += result[0][0]
+
+        cursor = self.db.cursor()
+        sql = """UPDATE tb_items
+                SET StockAvailable = %s
+                WHERE ItemID = %s"""
+        val = (amount_stock, id_stock)
+        cursor.execute(sql,val)
         self.db.commit()
 
     def get_record_item(self):
@@ -140,6 +157,7 @@ class Database_Connect:
             print("{: <10} {: <30} {: <15} {: <15} {: <15} {: <15} {: <15} {: <15}".format(*self.headers_fix))
             for data in self.results:
                 print("{: <10} {: <30} {: <15} {: <15} {: <15} {: <15} {: <15} {: <15}".format(*data))
+            print("")
 
     def login(self, name):
         try:
@@ -151,5 +169,80 @@ class Database_Connect:
             return ""
         except TypeError:
             return ""
+
+    def get_last_id(self):
+        cursor = self.db.cursor()
+        sql = "select max(TransactionID) from tb_transactions"
+        cursor.execute(sql)
+
+        last_id = cursor.fetchall()
+        last_id = last_id[0][0]
+        if last_id == None:
+            last_id = int(1)
+        return last_id
+    
+    def record_transaction(self, date_now, logged_id = 1):
+        cursor = self.db.cursor()
+        sql = "INSERT INTO tb_transactions (TransactionDate, PersonID) VALUES (%s, %s)"
+        val = (date_now, logged_id)
+        cursor.execute(sql,val)
+        self.db.commit()
+
+    def record_transaction_details(self, temp_storage, last_id):
+        for i in range(0, len(temp_storage)):
+            cursor = self.db.cursor()
+            sql = "INSERT INTO tb_transaction_details (TransactionID, ItemID, StockSold) VALUES (%s,%s,%s)"
+            val = (last_id, temp_storage[i][0], temp_storage[i][1])
+            cursor.execute(sql,val)
+            self.db.commit()
+
+            # update tabel sebelumbyaaaaa biar dia bisa nguyrang seusai yang dibeliu
+            cursor = self.db.cursor()
+            sql = "UPDATE tb_items SET StockAvailable=%s, StockSold=%s WHERE ItemID=%s"
+            val = (temp_storage[i][2], temp_storage[i][1], temp_storage[i][0])
+            cursor.execute(sql, val)
+            self.db.commit()
+
+    def get_transaction_ids(self):
+        headers_fix = ["ID Transaksi", "Tanggal Transaksi", "ID Kasir"]
+
+        cursor = self.db.cursor()
+        sql = "SELECT * FROM tb_transactions"
+        cursor.execute(sql)
+        results = cursor.fetchall()
+
+        print("{: ^15} {: ^20} {: ^15}".format(*headers_fix))
+        if cursor.rowcount < 0:
+            print("No data")
+        else:
+            for data in results:
+                print("{: ^15} {: ^20} {: ^15}".format(data[0], data[1].strftime("%d/%m/%Y"), data[2]))
+        
+
+    def get_record_transaction(self, check_id):
+        cursor = self.db.cursor()
+        sql = """SELECT t.TransactionID, t.TransactionDate, p.Username, i.ProductName, td.StockSold, td.StockSold*i.UnitSellPrice as HargaTotal
+                FROM tb_transactions t
+                join tb_persons p
+                on t.PersonID = p.PersonID
+                join tb_transaction_details td
+                on t.TransactionID = td.TransactionID
+                join tb_items i
+                on td.ItemID = i.ItemID
+
+                WHERE t.TransactionID = %s"""
+        val = (check_id,)
+        cursor.execute(sql, val)
+
+        self.results = cursor.fetchall()
+        return self.results
+
+
+
+
+
+        
+
+
 
         

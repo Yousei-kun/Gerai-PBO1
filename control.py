@@ -1,31 +1,46 @@
-from model_file import Model 
+from model_file import Model
+import datetime
+
+class Login_Controller:
+    def __init__(self):
+        pass
+
+    def show_login_menu(self):
+        x = True
+        while x == True:
+            print("""SELAMAT DATANG DI APLIKASI GERAI
+            1. Login (Admin)
+            2. Login (Cashier)""")
+            choose_get = int(input("Masukkan pilihan anda: "))
+            if choose_get == 1:
+                username = input("Masukkan username: ")
+                password = input("Masukkan password: ")
+                if main_model.login(username, password):
+                    admin_controller = Admin()
+                    admin_controller.username = "username"
+                    admin_controller.show_main_menu() # mengarahkan ke menu admin
+                    x = False
+                else:
+                    print("Maaf, username / password tidak sesuai dengan data kami.")            
+            elif choose_get == 2:
+                username = input("Masukkan username: ")
+                password = input("Masukkan password: ")
+                if main_model.login(username, password):
+                    cashier_controller = Cashier()
+                    cashier_controller.username = "username"
+                    cashier_controller.show_main_menu() # mengarahkan ke menu admin
+                    x = False
+                else:
+                    print("Maaf, username / password tidak sesuai dengan data kami.")   
+            else:
+                print("Pilihan tidak tersedia")
+
 
 class Controller:
+
     def __init__(self):
         self.list_add_item_questions = ['Masukkan nama barang : ', 'Masukkan kategori barang : ', ' Masukkan harga beli barang : ',
                                   'Masukkan harga jual barang : ', "Masukkan Stok yang tersedia (dalam kg ATAU pcs) : ", "Masukkan ID gudang penyimpanan : "]
-
-    def show_main_menu(self):
-        choose_read_write = 0
-        while (choose_read_write < 1 or choose_read_write > 3):
-            print("""
-Menu mana yang akan anda gunakan? (Pilih no 1-3)
-1. Tambah data (Hanya untuk Admin)
-2. Lihat data
-3. Tambah transaksi
-3. Berhenti
-4. Logout
-
-Masukkan pilihan anda : """ ,end='')
-            choose_read_write = int(input())
-            if choose_read_write == 1:
-                self.show_add_menu()
-            elif choose_read_write == 2:
-                self.show_get_menu()
-            elif choose_read_write == 3:
-                exit()
-            else:
-                print("Pilihan tidak tersedia. Mohon input lagi")
     
     def show_add_menu(self):
         choose_add = 0
@@ -34,6 +49,7 @@ Masukkan pilihan anda : """ ,end='')
 Menu mana yang akan anda gunakan? (Pilih no 1-2)
 1. Tambah data barang
 2. Tambah data gudang
+3. Tambah stok barang (Restock)
 3. Kembali ke menu utama
 
 Masukkan pilihan anda : """ ,end='')
@@ -41,10 +57,14 @@ Masukkan pilihan anda : """ ,end='')
             if choose_add == 1:
                 self.item_input_process()
                 main_model.add_item(self.list_add_item_answers)
+                self.show_add_menu()
             elif choose_add == 2:
                 self.warehouse_input_process()
                 main_model.add_warehouse(self.list_add_item_answers)
+                self.show_add_menu()
             elif choose_add == 3:
+                self.show_restock_item()
+            elif choose_add == 4:
                 self.show_main_menu()
             else:
                 print("Pilihan tidak tersedia. Mohon input lagi")
@@ -61,7 +81,6 @@ Masukkan pilihan anda : """ ,end='')
             else:
                 str(self.list_add_item_questions[i])
                 self.try_int_input(i)
-        self.show_add_menu()
         
 
     def warehouse_input_process(self):
@@ -87,9 +106,16 @@ Masukkan pilihan anda : """ ,end='')
             print("Kolom ini tidak boleh berisi huruf. Masukkan lagi detail barang")
             self.try_int_input(i)
 
+    def show_restock_item(self):
+        main_model.fetch_item()
+        main_model.print_item_values()
+        id_stock = int(input("Masukkan ID item yang akan direstock : "))
+        amount_stock = float(input("Masukkan jumlah item yang akan direstock : "))
+        main_model.update_stock(id_stock, amount_stock)
+
     def show_get_menu(self):
         choose_get = 0
-        while (choose_get < 1 or choose_get > 3):
+        while (choose_get < 1 or choose_get > 5):
             print("""
 Menu mana yang akan anda gunakan? (Pilih no 1-2)
 1. Tampilkan data barang
@@ -144,35 +170,143 @@ Masukkan pilihan anda : """ ,end='')
             else:
                 print("Pilihan tidak tersedia. Mohon input lagi")
 
-    def show_login_menu(self):
-        while True:
-            print("""SELAMAT DATANG DI APLIKASI GERAI
-            1. Login (Admin)
-            2. Login (Pelanggan)""")
-            choose_get = int(input("Masukkan pilihan anda: "))
-            if choose_get == 1:
-                username = input("Masukkan username: ")
-                password = input("Masukkan password: ")
-                if main_model.login(username, password):
-                    self.show_main_menu() # mengarahkan ke menu admin
-                else:
-                    print("Maaf, username / password tidak sesuai dengan data kami.")            
-            elif choose_get == 2:
-                username = input("Masukkan username: ")
-                password = input("Masukkan password: ")
-                if main_model.login(username, password):
-                    self.show_main_menu() # mengarahkan ke menu kasir
-                else:
-                    print("Maaf, username / password tidak sesuai dengan data kami.")   
-            else:
-                print("Pilihan tidak tersedia")
-
-
     def show_transaction_menu(self):
-        pass
+        choose_transaction = 0
+        while (choose_transaction < 1 or choose_transaction > 3):
+            print("""
+Menu mana yang akan anda gunakan? (Pilih no 1-3)
+1. Buat transaksi baru
+2. Lihat riwayat transaksi
+3. Kembali ke menu utama
+
+Masukkan pilihan anda : """ ,end='')
+            choose_transaction = int(input())
+            if choose_transaction == 1:
+                main_model.payment = 0
+                self.add_transaction_item()
+            elif choose_transaction == 2:
+                self.show_transaction_history()
+            elif choose_transaction == 3:
+                self.show_main_menu()
+            else:
+                print("Pilihan tidak tersedia. Mohon input lagi")
+
+    def add_transaction_item(self):
+        self.show_current_receipt()
+        main_model.fetch_receipt_body()
+        item_id = int(input("Masukkan ID barang\t: "))
+        stock_sold = float(input("Masukkan jumlah barang\t: "))
+        main_model.check_availability(item_id, stock_sold)
+        print("""Lanjutkan transaksi?
+1. Ya
+2. Tidak, print struk
+
+Masukkan pilihan anda : """ ,end='')
+
+        print_now = int(input())
+        if print_now == 1:
+            self.add_transaction_item()
+        elif print_now == 2:
+            main_model.fetch_add_next_transaction_info()
+            self.show_receipt_body()
+            main_model.record_transaction()
+            print("Proses print struk...")
+            print("Print sukses")
+            main_model.payment = 0
+            main_model.temp_storage = []
+            self.show_transaction_menu()
+        else:
+            print("Pilihan tidak tersedia. Mohon input lagi")
+            self.add_transaction_item()
+
+    def show_current_receipt(self):
+        main_model.fetch_item()
+        main_model.print_item_values()
+        main_model.fetch_add_next_transaction_info()
+    
+    def show_receipt_body(self):
+        main_model.fetch_receipt_body()
+
+    def show_transaction_history(self):
+        main_model.fetch_transaction_ids()
+        print()
+        id_fetch = int(input("Masukkan ID yang akan dilihat : "))
+        main_model.fetch_transaction_history(id_fetch)
+        self.show_transaction_menu()
         
+class Admin(Controller):
+    def __init__(self):
+        super().__init__()
+        self.login_as = "admin"
+
+    def show_main_menu(self):
+        choose_read_write = 0
+        while (choose_read_write < 1 or choose_read_write > 5):
+            print("""
+Menu mana yang akan anda gunakan? (Pilih no 1-3)
+1. Tambah data 
+2. Lihat data
+3. Tambah / Lihat riwayat transaksi
+4. Berhenti
+5. Logout
+
+Masukkan pilihan anda : """ ,end='')
+            choose_read_write = int(input())
+            if choose_read_write == 1:
+                self.show_add_menu()
+            elif choose_read_write == 2:
+                self.show_get_menu()
+            elif choose_read_write == 3:
+                main_model.payment = 0
+                main_model.temp_storage = []
+                self.show_transaction_menu()
+            elif choose_read_write == 4:
+                exit()
+            elif choose_read_write == 5:
+                print("Anda telah sukses melakukan Logout.")
+                print("\n"+"="*30+"\n")
+                self.login_as = None
+                login_controller.show_login_menu()
+            else:
+                print("Pilihan tidak tersedia. Mohon input lagi")
+
+class Cashier(Controller):
+    def __init__(self):
+        super().__init__()
+        self.login_as = "cashier"
+
+    def show_main_menu(self):
+        choose_read_write = 0
+        while (choose_read_write < 1 or choose_read_write > 4):
+            print("""
+Menu mana yang akan anda gunakan? (Pilih no 1-3)
+1. Lihat data
+2. Tambah / Lihat riwayat transaksi
+3. Berhenti
+4. Logout
+
+Masukkan pilihan anda : """ ,end='')
+            choose_read_write = int(input())
+            if choose_read_write == 1:
+                self.show_get_menu()
+            elif choose_read_write == 2:
+                main_model.payment = 0
+                main_model.temp_storage = []
+                self.show_transaction_menu()
+            elif choose_read_write == 3:
+                exit()
+            elif choose_read_write == 4:
+                print("Anda telah sukses melakukan Logout.")
+                print("\n"+"="*50+"\n")
+                self.login_as = None
+                login_controller.show_login_menu()
+            else:
+                print("Pilihan tidak tersedia. Mohon input lagi")
+
 
 if __name__ == "__main__":
     main_model = Model()
-    main_controller = Controller()
-    main_controller.show_login_menu()
+    login_controller = Login_Controller()
+    login_controller.show_login_menu()
+
+
