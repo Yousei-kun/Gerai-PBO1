@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.4
+-- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 14, 2020 at 03:37 AM
--- Server version: 10.4.17-MariaDB
--- PHP Version: 7.3.25
+-- Generation Time: Dec 17, 2020 at 10:53 AM
+-- Server version: 10.4.14-MariaDB
+-- PHP Version: 7.4.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -43,9 +43,11 @@ CREATE TABLE `tb_items` (
 --
 
 INSERT INTO `tb_items` (`ItemID`, `ProductName`, `CategoryName`, `UnitSellPrice`, `UnitBuyPrice`, `StockAvailable`, `StockSold`, `WarehouseID`) VALUES
-(1, 'Beras', 'Sembako', 12000, 10000, 100, 0, 1),
-(2, 'Tango 100gr', 'Makanan', 2000, 1250, 100, 0, 1),
-(3, 'Sabun Shinzui', 'Kebersihan', 3500, 2500, 50, 0, 2);
+(1, 'Beras', 'Sembako', 12000, 10000, 60, 55, 1),
+(2, 'Tango 100gr', 'Makanan', 2000, 1250, 0, 70, 1),
+(3, 'Sabun Shinzui', 'Kebersihan', 3500, 2500, 30, 20, 2),
+(4, 'adddd', 'asd', 123, 12334, 100, 0, 2),
+(5, 'Beras Dua Anak', 'Sembako', 123, 1234, 200, 0, 3);
 
 -- --------------------------------------------------------
 
@@ -88,7 +90,8 @@ CREATE TABLE `tb_persons` (
 --
 
 INSERT INTO `tb_persons` (`PersonID`, `PersonName`, `Username`, `Password`, `PersonAge`, `PersonAdress`, `LevelID`) VALUES
-(1, 'Ivan', 'admin', 'admin123', 12, 'Jember', 1);
+(1, 'Ivan', 'admin', 'admin123', 12, 'Jember', 1),
+(2, 'Pak Manto', 'manto12', 'manto123', 25, NULL, 2);
 
 -- --------------------------------------------------------
 
@@ -102,6 +105,24 @@ CREATE TABLE `tb_transactions` (
   `PersonID` bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `tb_transactions`
+--
+
+INSERT INTO `tb_transactions` (`TransactionID`, `TransactionDate`, `PersonID`) VALUES
+(1, '2020-12-01', 1),
+(3, '2020-12-16', 1),
+(4, '2020-12-16', 1),
+(5, '2020-12-16', 1),
+(6, '2020-12-16', 1),
+(7, '2020-12-16', 1),
+(8, '2020-12-16', 1),
+(9, '2020-12-16', 1),
+(10, '2020-12-16', 1),
+(11, '2020-12-16', 1),
+(12, '2020-12-16', 1),
+(13, '2020-12-17', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -111,8 +132,31 @@ CREATE TABLE `tb_transactions` (
 CREATE TABLE `tb_transaction_details` (
   `DetailTransactionID` bigint(20) NOT NULL,
   `TransactionID` bigint(20) NOT NULL,
-  `PersonID` bigint(20) NOT NULL
+  `ItemID` bigint(20) NOT NULL,
+  `StockSold` double NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tb_transaction_details`
+--
+
+INSERT INTO `tb_transaction_details` (`DetailTransactionID`, `TransactionID`, `ItemID`, `StockSold`) VALUES
+(7, 3, 1, 20),
+(8, 4, 3, 20),
+(9, 5, 3, 20),
+(10, 5, 2, 34),
+(11, 6, 4, 3),
+(12, 7, 1, 20),
+(13, 7, 2, 30),
+(14, 7, 5, 10),
+(15, 8, 5, 2),
+(16, 9, 1, 20),
+(17, 9, 3, 2),
+(18, 10, 1, 50),
+(19, 11, 2, 70),
+(20, 12, 2, 70),
+(21, 12, 1, 60),
+(22, 13, 1, 55);
 
 -- --------------------------------------------------------
 
@@ -132,7 +176,10 @@ CREATE TABLE `tb_warehouse` (
 INSERT INTO `tb_warehouse` (`WarehouseID`, `WarehouseAddress`) VALUES
 (1, 'Jalan Letjend S. Parman no 31 Jember, Jawa Timur'),
 (2, 'Jalan Kartini no 23 Jember, Jawa Timur'),
-(3, 'Jalan Setelan no 32 Malang, Jawa Timur');
+(3, 'Jalan Setelan no 32 Malang, Jawa Timur'),
+(6, 'asdasdas'),
+(7, 'Jsdd'),
+(8, 'dlmdd');
 
 --
 -- Indexes for dumped tables
@@ -171,7 +218,7 @@ ALTER TABLE `tb_transactions`
 ALTER TABLE `tb_transaction_details`
   ADD PRIMARY KEY (`DetailTransactionID`),
   ADD KEY `TransactionID` (`TransactionID`),
-  ADD KEY `PersonID` (`PersonID`);
+  ADD KEY `ItemID` (`ItemID`);
 
 --
 -- Indexes for table `tb_warehouse`
@@ -187,31 +234,31 @@ ALTER TABLE `tb_warehouse`
 -- AUTO_INCREMENT for table `tb_items`
 --
 ALTER TABLE `tb_items`
-  MODIFY `ItemID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ItemID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `tb_persons`
 --
 ALTER TABLE `tb_persons`
-  MODIFY `PersonID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `PersonID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `tb_transactions`
 --
 ALTER TABLE `tb_transactions`
-  MODIFY `TransactionID` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `TransactionID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `tb_transaction_details`
 --
 ALTER TABLE `tb_transaction_details`
-  MODIFY `DetailTransactionID` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `DetailTransactionID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `tb_warehouse`
 --
 ALTER TABLE `tb_warehouse`
-  MODIFY `WarehouseID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `WarehouseID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- Constraints for dumped tables
@@ -240,7 +287,7 @@ ALTER TABLE `tb_transactions`
 --
 ALTER TABLE `tb_transaction_details`
   ADD CONSTRAINT `tb_transaction_details_ibfk_1` FOREIGN KEY (`TransactionID`) REFERENCES `tb_transactions` (`TransactionID`),
-  ADD CONSTRAINT `tb_transaction_details_ibfk_2` FOREIGN KEY (`PersonID`) REFERENCES `tb_persons` (`PersonID`);
+  ADD CONSTRAINT `tb_transaction_details_ibfk_2` FOREIGN KEY (`ItemID`) REFERENCES `tb_items` (`ItemID`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
