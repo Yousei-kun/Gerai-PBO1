@@ -11,13 +11,16 @@ class Login_Controller:
             print("""SELAMAT DATANG DI APLIKASI GERAI
             1. Login (Admin)
             2. Login (Cashier)""")
-            choose_get = int(input("Masukkan pilihan anda: "))
+            try:
+                choose_get = int(input("Masukkan pilihan anda: "))
+            except ValueError:
+                choose_get = 0
             if choose_get == 1:
                 username = input("Masukkan username: ")
                 password = input("Masukkan password: ")
                 if main_model.login(username, password):
                     admin_controller = Admin()
-                    admin_controller.username = "username"
+                    admin_controller.username = username
                     admin_controller.show_main_menu() # mengarahkan ke menu admin
                     x = False
                 else:
@@ -27,7 +30,7 @@ class Login_Controller:
                 password = input("Masukkan password: ")
                 if main_model.login(username, password):
                     cashier_controller = Cashier()
-                    cashier_controller.username = "username"
+                    cashier_controller.username = username
                     cashier_controller.show_main_menu() # mengarahkan ke menu admin
                     x = False
                 else:
@@ -53,7 +56,10 @@ Menu mana yang akan anda gunakan? (Pilih no 1-2)
 3. Kembali ke menu utama
 
 Masukkan pilihan anda : """ ,end='')
-            choose_add = int(input())
+            try:
+                choose_add = int(input())
+            except ValueError:
+                choose_add = 0
             if choose_add == 1:
                 self.item_input_process()
                 main_model.add_item(self.list_add_item_answers)
@@ -125,7 +131,10 @@ Menu mana yang akan anda gunakan? (Pilih no 1-2)
 5. Kembali ke menu utama
 
 Masukkan pilihan anda : """ ,end='')
-            choose_get = int(input())
+            try:
+                choose_get = int(input())
+            except ValueError:
+                choose_get = 0
             if choose_get == 1:
                 main_model.fetch_item()
                 main_model.print_item_values()
@@ -154,7 +163,10 @@ Menu mana yang akan anda gunakan? (Pilih no 1-2)
 2. Kembali ke menu utama
 
 Masukkan pilihan anda : """ ,end='')
-            choose_get = int(input())
+            try:
+                choose_get = int(input())
+            except ValueError:
+                choose_get = 0
             if choose_get == 1:
                 try:
                     val = str(input())
@@ -202,8 +214,10 @@ Masukkan pilihan anda : """ ,end='')
 2. Tidak, print struk
 
 Masukkan pilihan anda : """ ,end='')
-
-        print_now = int(input())
+        try:
+            print_now = int(input())
+        except ValueError:
+            print_now = 0
         if print_now == 1:
             self.add_transaction_item()
         elif print_now == 2:
@@ -251,7 +265,10 @@ Menu mana yang akan anda gunakan? (Pilih no 1-3)
 5. Logout
 
 Masukkan pilihan anda : """ ,end='')
-            choose_read_write = int(input())
+            try:
+                choose_read_write = int(input())
+            except ValueError:
+                choose_read_write = 0
             if choose_read_write == 1:
                 self.show_add_menu()
             elif choose_read_write == 2:
@@ -286,7 +303,10 @@ Menu mana yang akan anda gunakan? (Pilih no 1-3)
 4. Logout
 
 Masukkan pilihan anda : """ ,end='')
-            choose_read_write = int(input())
+            try:
+                choose_read_write = int(input())
+            except ValueError:
+                choose_read_write = 0
             if choose_read_write == 1:
                 self.show_get_menu()
             elif choose_read_write == 2:
