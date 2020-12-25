@@ -1,4 +1,5 @@
 from model_file import Model
+from abc import ABC, abstractmethod
 import datetime
 
 class Login_Controller:
@@ -248,6 +249,10 @@ Masukkan pilihan anda : """ ,end='')
         main_model.fetch_transaction_history(id_fetch)
         self.show_transaction_menu()
         
+    @abstractmethod    
+    def show_main_menu(self):
+        pass
+
 class Admin(Controller):
     def __init__(self):
         super().__init__()
