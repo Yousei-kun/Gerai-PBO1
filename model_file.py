@@ -1,12 +1,10 @@
 import database_connector as db_con
 import datetime
 
-
 class Model:
     def __init__(self):
         self.db_connect = db_con.Database_Connect()
-        self.db_connect.create_database()
-        self.db_connect.create_table()
+        self.db_connect.prepare_database()
         self.receipt_header = ["No", "Nama Barang", "Jumlah Beli", "Total"]
         self.temp_storage = []
         self.payment = 0
@@ -79,21 +77,27 @@ class Model:
             self.last_id = self.db_connect.get_last_id()
             self.last_id += 1
             self.date_now = datetime.datetime.now().strftime("%d/%m/%Y")
+
+            print("""ID Struk\t\t: {}
+    Tanggal Struk\t\t: {}
+    Nama Pegawai\t\t: {}
+    Total bayar\t\t: Rp {}""".format(self.last_id,self.date_now,self.logged_username, self.payment))
         
         elif method2 == 2:
             self.last_id = self.temp_storage[0][0]
             self.date_now = self.temp_storage[0][1].strftime("%d/%m/%Y")
             self.logged_username_temp = self.logged_username
+            print(self.logged_username_temp)
+            print(self.logged_username)
             self.logged_username = self.temp_storage[0][2]
             self.payment = 0
             for data in self.temp_storage:
                 self.payment += data[5]
 
-        print("""ID Struk\t\t: {}
-Tanggal Struk\t\t: {}
-Nama Pegawai\t\t: {}
-Total bayar\t\t: Rp {}""".format(self.last_id,self.date_now,self.logged_username, self.payment))
-        self.logged_username = self.logged_username_temp
+            print("""ID Struk\t\t: {}
+    Tanggal Struk\t\t: {}
+    Nama Pegawai\t\t: {}
+    Total bayar\t\t: Rp {}""".format(self.last_id,self.date_now,self.logged_username, self.payment))
 
     def check_availability(self,item_id, stock_sold):
         found = 0
@@ -130,7 +134,6 @@ Total bayar\t\t: Rp {}""".format(self.last_id,self.date_now,self.logged_username
         self.db_connect.record_transaction(self.date_submit, self.logged_id)
         self.db_connect.record_transaction_details(self.temp_storage, self.last_id)
         print("Sukses")
-
 
     def fetch_transaction_ids(self):
         self.db_connect.get_transaction_ids()
