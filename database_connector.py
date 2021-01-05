@@ -143,21 +143,21 @@ class Database_Connect:
         cursor.execute(sql)
         results = cursor.fetchall()
 
-        print("{: <15} {: <100}".format(*headers_fix))
+        result = "{: <15} {: <100}\n".format(*headers_fix)
         if cursor.rowcount < 0:
-            print("No data")
+            result += "No data"
         else:
             for data in results:
-                print("{: <15} {: <100}".format(*data))
+                result += "{: <15} {: <100}\n".format(*data)
 
     def get_item_values(self):
         if len(self.results) == 0:
-            print("No data")
+            return "No data"
         else:
-            print("{: <10} {: <30} {: <15} {: <15} {: <15} {: <15} {: <15} {: <15}".format(*self.headers_fix))
+            result = "{: <10} {: <30} {: <15} {: <15} {: <15} {: <15} {: <15} {: <15}\n".format(*self.headers_fix)
             for data in self.results:
-                print("{: <10} {: <30} {: <15} {: <15} {: <15} {: <15} {: <15} {: <15}".format(*data))
-            print("")
+                result += "{: <10} {: <30} {: <15} {: <15} {: <15} {: <15} {: <15} {: <15}\n".format(*data)
+            return result
 
     def login(self, name, levelID):
         try:

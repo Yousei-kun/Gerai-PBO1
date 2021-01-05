@@ -37,7 +37,7 @@ class Model:
         self.header_data, self.item_data = self.db_connect.get_record_item()
     
     def print_item_values(self):
-        self.db_connect.get_item_values()
+        return self.db_connect.get_item_values()
 
     def print_search_item(self,val):
         filtered_item_data = []
@@ -47,15 +47,15 @@ class Model:
                 filtered_item_data.append(self.item_data[i])
 
         if len(filtered_item_data) == 0:
-            print("Produk tidak ditemukan")
+            return"Produk tidak ditemukan"
         else:
-            print("{: <10} {: <30} {: <15} {: <15} {: <15} {: <15} {: <15} {: <15}".format(*self.header_data))
+            result = "{: <10} {: <30} {: <15} {: <15} {: <15} {: <15} {: <15} {: <15}\n".format(*self.header_data)
             for data in filtered_item_data:
-                print("{: <10} {: <30} {: <15} {: <15} {: <15} {: <15} {: <15} {: <15}".format(*data))
-            print("")
+                result += "{: <10} {: <30} {: <15} {: <15} {: <15} {: <15} {: <15} {: <15}\n".format(*data)
+            return result
 
     def fetch_warehouse(self):
-        self.db_connect.get_record_warehouse()
+        return self.db_connect.get_record_warehouse()
     
     def print_sorted_item(self):
 
@@ -68,12 +68,12 @@ class Model:
                     sorted_item_data[j], sorted_item_data[j+1] = sorted_item_data[j+1], sorted_item_data[j]
         
         if len(sorted_item_data) == 0:
-            print("Tidak ada produk")
+            return "Tidak ada produk"
         else:
-            print("{: <10} {: <30} {: <15} {: <15} {: <15} {: <15} {: <15} {: <15}".format(*self.header_data))
+            result = "{: <10} {: <30} {: <15} {: <15} {: <15} {: <15} {: <15} {: <15}\n".format(*self.header_data)
             for data in sorted_item_data:
-                print("{: <10} {: <30} {: <15} {: <15} {: <15} {: <15} {: <15} {: <15}".format(*data))
-            print("")
+                result += "{: <10} {: <30} {: <15} {: <15} {: <15} {: <15} {: <15} {: <15}\n".format(*data)
+            return result
 
     def fetch_add_next_transaction_info(self, method2 = 1):
         if method2 == 1:
@@ -90,47 +90,52 @@ class Model:
             for data in self.temp_storage:
                 self.payment += data[5]
 
-        print("""ID Struk\t\t: {}
+        result = """ID Struk\t\t: {}
 Tanggal Struk\t\t: {}
 Nama Pegawai\t\t: {}
-Total bayar\t\t: Rp {}""".format(self.last_id,self.date_now,self.logged_username, self.payment))
+Total bayar\t\t: Rp {}""".format(self.last_id,self.date_now,self.logged_username, self.payment)
         self.logged_username = self.logged_username_temp
+        return result
 
     def check_availability(self,item_id, stock_sold):
         found = 0
 
+        result = ""
         for i in range (0,len(self.item_data)):
             if item_id == self.item_data[i][0]:
                 item_stock = self.item_data[i][5]
                 if item_stock >= stock_sold:
                     self.temp_storage.append([item_id, stock_sold, self.item_data[i][5]-stock_sold, self.item_data[i][1], self.item_data[i][3]])
-                    print("Barang berhasil ditambahkan")
+                    result += "Barang berhasil ditambahkan\n"
                     self.payment += stock_sold * self.item_data[i][3]
                 else:
-                    print("Stok tidak cukup. Tidak diperkenankan menambahkan transaksi")
+                    result += "Stok tidak cukup. Tidak diperkenankan menambahkan transaksi\n"
                 found += 1
                 break
-
+            
         if found == 0:
-            print("Barang tidak ditemukan")
+            return "Barang tidak ditemukan"
+        return result
         
     def fetch_receipt_body(self, method2 = 1):
         if len(self.temp_storage) == 0:
-            print("No data")
+            return "No data"
         else:
-            print("{: <5} {: <30} {: <15} {: <15}".format(*self.receipt_header))
+            result = "{: <5} {: <30} {: <15} {: <15}\n".format(*self.receipt_header)
             if method2 == 1:
                 for i in range(0,len(self.temp_storage)):
-                    print("{: <5} {: <30} {: <15} {: <15}".format(i+1, self.temp_storage[i][3], self.temp_storage[i][1], self.temp_storage[i][1]*self.temp_storage[i][4]))
+                    result += "{: <5} {: <30} {: <15} {: <15}\n".format(i+1, self.temp_storage[i][3], self.temp_storage[i][1], self.temp_storage[i][1]*self.temp_storage[i][4])
             elif method2 == 2:
                 for i in range(0,len(self.temp_storage)):
-                    print("{: <5} {: <30} {: <15} {: <15}".format(i+1, self.temp_storage[i][3], self.temp_storage[i][4], self.temp_storage[i][5]))
+                    result += "{: <5} {: <30} {: <15} {: <15}\n".format(i+1, self.temp_storage[i][3], self.temp_storage[i][4], self.temp_storage[i][5])
+
+        return result
 
     def record_transaction(self):
         self.date_submit = datetime.datetime.now().strftime("%Y-%m-%d")
         self.db_connect.record_transaction(self.date_submit, self.logged_id)
         self.db_connect.record_transaction_details(self.temp_storage, self.last_id)
-        print("Sukses")
+        return "Sukses"
 
 
     def fetch_transaction_ids(self):
@@ -138,8 +143,10 @@ Total bayar\t\t: Rp {}""".format(self.last_id,self.date_now,self.logged_username
 
     def fetch_transaction_history(self, id_fetch):
         self.temp_storage = self.db_connect.get_record_transaction(id_fetch)
-        self.fetch_add_next_transaction_info(2)
-        self.fetch_receipt_body(2)
+        result = ""
+        result += self.fetch_add_next_transaction_info(2)
+        result += self.fetch_receipt_body(2)
+        return result
 
 
         

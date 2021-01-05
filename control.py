@@ -115,7 +115,7 @@ Masukkan pilihan anda : """ ,end='')
 
     def show_restock_item(self):
         main_model.fetch_item()
-        main_model.print_item_values()
+        print(main_model.print_item_values())
         id_stock = int(input("Masukkan ID item yang akan direstock : "))
         amount_stock = float(input("Masukkan jumlah item yang akan direstock : "))
         main_model.update_stock(id_stock, amount_stock)
@@ -138,10 +138,10 @@ Masukkan pilihan anda : """ ,end='')
                 choose_get = 0
             if choose_get == 1:
                 main_model.fetch_item()
-                main_model.print_item_values()
+                print(main_model.print_item_values())
                 self.show_get_menu()
             elif choose_get == 2:
-                main_model.fetch_warehouse()
+                print(main_model.fetch_warehouse())
                 self.show_get_menu()
             elif choose_get == 3:
                 main_model.fetch_item()
@@ -149,7 +149,8 @@ Masukkan pilihan anda : """ ,end='')
                 self.show_get_menu()
             elif choose_get == 4:
                 main_model.fetch_item()
-                main_model.print_sorted_item()
+                print(main_model.print_sorted_item())
+                self.show_get_menu()
             elif choose_get == 5:
                 self.show_main_menu()
             else:
@@ -176,7 +177,7 @@ Masukkan pilihan anda : """ ,end='')
                     print("Barang tidak boleh berwujud angka saja. Masukkan lagi detail barang")
                     self.search_data()
                 except ValueError:
-                    main_model.print_search_item(val)
+                    print(main_model.print_search_item(val))
                 self.search_data()
             elif choose_get == 2:
                 self.show_get_menu()
@@ -206,10 +207,10 @@ Masukkan pilihan anda : """ ,end='')
 
     def add_transaction_item(self):
         self.show_current_receipt()
-        main_model.fetch_receipt_body()
+        print(main_model.fetch_receipt_body())
         item_id = int(input("Masukkan ID barang\t: "))
         stock_sold = float(input("Masukkan jumlah barang\t: "))
-        main_model.check_availability(item_id, stock_sold)
+        print(main_model.check_availability(item_id, stock_sold))
         print("""Lanjutkan transaksi?
 1. Ya
 2. Tidak, print struk
@@ -222,9 +223,9 @@ Masukkan pilihan anda : """ ,end='')
         if print_now == 1:
             self.add_transaction_item()
         elif print_now == 2:
-            main_model.fetch_add_next_transaction_info()
+            print(main_model.fetch_add_next_transaction_info())
             self.show_receipt_body()
-            main_model.record_transaction()
+            print(main_model.record_transaction())
             print("Proses print struk...")
             print("Print sukses")
             main_model.payment = 0
@@ -236,17 +237,17 @@ Masukkan pilihan anda : """ ,end='')
 
     def show_current_receipt(self):
         main_model.fetch_item()
-        main_model.print_item_values()
-        main_model.fetch_add_next_transaction_info()
+        print(main_model.print_item_values())
+        print(main_model.fetch_add_next_transaction_info())
     
     def show_receipt_body(self):
-        main_model.fetch_receipt_body()
+        print(main_model.fetch_receipt_body())
 
     def show_transaction_history(self):
         main_model.fetch_transaction_ids()
         print()
         id_fetch = int(input("Masukkan ID yang akan dilihat : "))
-        main_model.fetch_transaction_history(id_fetch)
+        print(main_model.fetch_transaction_history(id_fetch))
         self.show_transaction_menu()
 
     @abstractmethod
