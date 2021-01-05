@@ -11,12 +11,13 @@ class Model:
         self.temp_storage = []
         self.payment = 0
 
-    def login(self, username, password):
-        login_credentioal = self.db_connect.login(username)
-        if login_credentioal == password:
-            self.logged_username = username
-            self.logged_id = 1
-            return True
+    def login(self, username, password, level):
+        login_credentioal = self.db_connect.login(username, level)
+        if login_credentioal != None:
+            if login_credentioal[1] == password:
+                self.logged_username = username
+                self.logged_id = login_credentioal[0]
+                return True
         else:
             return False
 

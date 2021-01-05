@@ -1,4 +1,5 @@
 from model_file import Model
+from abc import ABC, abstractmethod
 import datetime
 
 class Login_Controller:
@@ -9,8 +10,8 @@ class Login_Controller:
         x = True
         while x == True:
             print("""SELAMAT DATANG DI APLIKASI GERAI
-            1. Login (Admin)
-            2. Login (Cashier)""")
+1. Login (Admin)
+2. Login (Cashier)""")
             try:
                 choose_get = int(input("Masukkan pilihan anda: "))
             except ValueError:
@@ -18,7 +19,7 @@ class Login_Controller:
             if choose_get == 1:
                 username = input("Masukkan username: ")
                 password = input("Masukkan password: ")
-                if main_model.login(username, password):
+                if main_model.login(username, password, 1):
                     admin_controller = Admin()
                     admin_controller.username = username
                     admin_controller.show_main_menu() # mengarahkan ke menu admin
@@ -28,7 +29,7 @@ class Login_Controller:
             elif choose_get == 2:
                 username = input("Masukkan username: ")
                 password = input("Masukkan password: ")
-                if main_model.login(username, password):
+                if main_model.login(username, password, 2):
                     cashier_controller = Cashier()
                     cashier_controller.username = username
                     cashier_controller.show_main_menu() # mengarahkan ke menu admin
@@ -247,6 +248,10 @@ Masukkan pilihan anda : """ ,end='')
         id_fetch = int(input("Masukkan ID yang akan dilihat : "))
         main_model.fetch_transaction_history(id_fetch)
         self.show_transaction_menu()
+
+    @abstractmethod
+    def show_main_menu(self):
+        pass
         
 class Admin(Controller):
     def __init__(self):

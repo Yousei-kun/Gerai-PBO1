@@ -159,12 +159,12 @@ class Database_Connect:
                 print("{: <10} {: <30} {: <15} {: <15} {: <15} {: <15} {: <15} {: <15}".format(*data))
             print("")
 
-    def login(self, name):
+    def login(self, name, levelID):
         try:
             cursor = self.db.cursor()
-            query = "SELECT Password FROM tb_persons WHERE Username = %s"
-            cursor.execute(query, (name,))
-            return  cursor.fetchone()[0]
+            query = "SELECT PersonID,Password FROM tb_persons WHERE Username = %s AND LevelID = %s"
+            cursor.execute(query, (name,levelID))
+            return  cursor.fetchone()
         except mysql.connector.Error:
             return ""
         except TypeError:
