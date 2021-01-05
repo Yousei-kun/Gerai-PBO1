@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.2
+-- version 5.0.3
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Dec 17, 2020 at 10:53 AM
+-- Host: localhost
+-- Generation Time: Jan 05, 2021 at 06:21 AM
 -- Server version: 10.4.14-MariaDB
--- PHP Version: 7.4.10
+-- PHP Version: 7.4.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -47,7 +47,8 @@ INSERT INTO `tb_items` (`ItemID`, `ProductName`, `CategoryName`, `UnitSellPrice`
 (2, 'Tango 100gr', 'Makanan', 2000, 1250, 0, 70, 1),
 (3, 'Sabun Shinzui', 'Kebersihan', 3500, 2500, 30, 20, 2),
 (4, 'adddd', 'asd', 123, 12334, 100, 0, 2),
-(5, 'Beras Dua Anak', 'Sembako', 123, 1234, 200, 0, 3);
+(5, 'Beras Dua Anak', 'Sembako', 123, 1234, 200, 0, 3),
+(6, 'Apel', 'Buah', 20000, 25000, 5, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -91,7 +92,7 @@ CREATE TABLE `tb_persons` (
 
 INSERT INTO `tb_persons` (`PersonID`, `PersonName`, `Username`, `Password`, `PersonAge`, `PersonAdress`, `LevelID`) VALUES
 (1, 'Ivan', 'admin', 'admin123', 12, 'Jember', 1),
-(2, 'Pak Manto', 'manto12', 'manto123', 25, NULL, 2);
+(2, 'Fakhrii Naufal', 'fakhrii', 'pass123', 25, 'Mangli', 2);
 
 -- --------------------------------------------------------
 
@@ -177,9 +178,9 @@ INSERT INTO `tb_warehouse` (`WarehouseID`, `WarehouseAddress`) VALUES
 (1, 'Jalan Letjend S. Parman no 31 Jember, Jawa Timur'),
 (2, 'Jalan Kartini no 23 Jember, Jawa Timur'),
 (3, 'Jalan Setelan no 32 Malang, Jawa Timur'),
-(6, 'asdasdas'),
-(7, 'Jsdd'),
-(8, 'dlmdd');
+(6, 'Jl. Kebahagiaan No 2, Perempatan Timur'),
+(7, 'Jalan Patah Tumbuh No. 23'),
+(8, 'Jalan Balik Putar 24, Angkasa Barat');
 
 --
 -- Indexes for dumped tables
@@ -234,7 +235,7 @@ ALTER TABLE `tb_warehouse`
 -- AUTO_INCREMENT for table `tb_items`
 --
 ALTER TABLE `tb_items`
-  MODIFY `ItemID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `ItemID` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `tb_persons`

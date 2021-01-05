@@ -150,6 +150,8 @@ class Database_Connect:
             for data in results:
                 result += "{: <15} {: <100}\n".format(*data)
 
+        return result
+
     def get_item_values(self):
         if len(self.results) == 0:
             return "No data"
