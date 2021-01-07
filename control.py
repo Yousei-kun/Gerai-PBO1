@@ -48,13 +48,13 @@ class Controller:
     
     def show_add_menu(self):
         choose_add = 0
-        while (choose_add < 1 or choose_add > 3):
+        while (choose_add < 1 or choose_add > 4):
             print("""
-Menu mana yang akan anda gunakan? (Pilih no 1-2)
+Menu mana yang akan anda gunakan? (Pilih no 1-4)
 1. Tambah data barang
 2. Tambah data gudang
 3. Tambah stok barang (Restock)
-3. Kembali ke menu utama
+4. Kembali ke menu utama
 
 Masukkan pilihan anda : """ ,end='')
             try:
@@ -71,6 +71,7 @@ Masukkan pilihan anda : """ ,end='')
                 self.show_add_menu()
             elif choose_add == 3:
                 self.show_restock_item()
+                self.show_add_menu()
             elif choose_add == 4:
                 self.show_main_menu()
             else:
@@ -124,11 +125,11 @@ Masukkan pilihan anda : """ ,end='')
         choose_get = 0
         while (choose_get < 1 or choose_get > 5):
             print("""
-Menu mana yang akan anda gunakan? (Pilih no 1-2)
+Menu mana yang akan anda gunakan? (Pilih no 1-5)
 1. Tampilkan data barang
 2. Tampilkan data gudang
 3. Cari data barang berdasarkan nama / kategori barang
-4. Urutkan data barang berdasarkan harga
+4. Urutkan data barang berdasarkan harga terbesar
 5. Kembali ke menu utama
 
 Masukkan pilihan anda : """ ,end='')
@@ -263,7 +264,7 @@ class Admin(Controller):
         choose_read_write = 0
         while (choose_read_write < 1 or choose_read_write > 5):
             print("""
-Menu mana yang akan anda gunakan? (Pilih no 1-3)
+Menu mana yang akan anda gunakan? (Pilih no 1-5)
 1. Tambah data 
 2. Lihat data
 3. Tambah / Lihat riwayat transaksi
@@ -302,7 +303,7 @@ class Cashier(Controller):
         choose_read_write = 0
         while (choose_read_write < 1 or choose_read_write > 4):
             print("""
-Menu mana yang akan anda gunakan? (Pilih no 1-3)
+Menu mana yang akan anda gunakan? (Pilih no 1-4)
 1. Lihat data
 2. Tambah / Lihat riwayat transaksi
 3. Berhenti

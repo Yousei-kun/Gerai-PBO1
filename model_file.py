@@ -80,6 +80,7 @@ class Model:
             self.last_id = self.db_connect.get_last_id()
             self.last_id += 1
             self.date_now = datetime.datetime.now().strftime("%d/%m/%Y")
+            self.logged_username_temp = self.logged_username
         
         elif method2 == 2:
             self.last_id = self.temp_storage[0][0]
