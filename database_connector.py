@@ -2,13 +2,14 @@ import mysql.connector
 
 class Database_Connect:
     def __init__(self):
+
         self.db = mysql.connector.connect(
         host="localhost",
         user="root",
         passwd="",
         )
     
-    def prepare_database(self):
+    def create_database(self):
         cursor = self.db.cursor()
         sql = "CREATE DATABASE IF NOT EXISTS db_shop;"
         cursor.execute(sql)
@@ -18,8 +19,8 @@ class Database_Connect:
             passwd="",
             database="db_shop"
         )
-        self.db.commit()
 
+    def create_table(self):
         cursor = self.db.cursor()
         sql = """CREATE TABLE IF NOT EXISTS tb_warehouse (
                 WarehouseID BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -74,22 +75,6 @@ class Database_Connect:
                 FOREIGN KEY (ItemID) REFERENCES tb_items(ItemID)
         );"""
         cursor.execute(sql)
-        self.db.commit()
-
-    def execute_query(self, query, val = None):
-        if val == None:
-            cursor = self.db.cursor()
-            cursor.execute(query)
-            result = cursor.fetchall()
-            return result
-        else:
-            cursor = self.db.cursor()
-            cursor.execute(query, val)
-            result = cursor.fetchall()
-            return result
-
-
-
 
 
     def record_warehouse_value(self, a):
@@ -158,21 +143,34 @@ class Database_Connect:
         cursor.execute(sql)
         results = cursor.fetchall()
 
-        print("{: <15} {: <100}".format(*headers_fix))
+        result = "{: <15} {: <100}\n".format(*headers_fix)
         if cursor.rowcount < 0:
-            print("No data")
+            result += "No data"
         else:
             for data in results:
-                print("{: <15} {: <100}".format(*data))
+                result += "{: <15} {: <100}\n".format(*data)
+
+        return result
 
     def get_item_values(self):
         if len(self.results) == 0:
-            print("No data")
+            return "No data"
         else:
-            print("{: <10} {: <30} {: <15} {: <15} {: <15} {: <15} {: <15} {: <15}".format(*self.headers_fix))
+            result = "{: <10} {: <30} {: <15} {: <15} {: <15} {: <15} {: <15} {: <15}\n".format(*self.headers_fix)
             for data in self.results:
-                print("{: <10} {: <30} {: <15} {: <15} {: <15} {: <15} {: <15} {: <15}".format(*data))
-            print("")
+                result += "{: <10} {: <30} {: <15} {: <15} {: <15} {: <15} {: <15} {: <15}\n".format(*data)
+            return result
+
+    def login(self, name, levelID):
+        try:
+            cursor = self.db.cursor()
+            query = "SELECT PersonID,Password FROM tb_persons WHERE Username = %s AND LevelID = %s"
+            cursor.execute(query, (name,levelID))
+            return  cursor.fetchone()
+        except mysql.connector.Error:
+            return ""
+        except TypeError:
+            return ""
 
     def get_last_id(self):
         cursor = self.db.cursor()
@@ -222,6 +220,7 @@ class Database_Connect:
             for data in results:
                 print("{: ^15} {: ^20} {: ^15}".format(data[0], data[1].strftime("%d/%m/%Y"), data[2]))
         
+
     def get_record_transaction(self, check_id):
         cursor = self.db.cursor()
         sql = """SELECT t.TransactionID, t.TransactionDate, p.Username, i.ProductName, td.StockSold, td.StockSold*i.UnitSellPrice as HargaTotal
@@ -239,7 +238,6 @@ class Database_Connect:
 
         self.results = cursor.fetchall()
         return self.results
-
 
 
 
